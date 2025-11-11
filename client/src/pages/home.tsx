@@ -18,7 +18,7 @@ export default function HomePage() {
   const calculateMutation = useMutation({
     mutationFn: async (idea: string) => {
       const response = await apiRequest("POST", "/api/calculate", { appIdea: idea });
-      return response as CalculationResponse;
+      return await response.json() as CalculationResponse;
     },
     onSuccess: (data) => {
       setCalculationResult(data);
@@ -29,7 +29,7 @@ export default function HomePage() {
   const optimizeMutation = useMutation({
     mutationFn: async (prompt: string) => {
       const response = await apiRequest("POST", "/api/optimize", { originalPrompt: prompt });
-      return response as OptimizationResponse;
+      return await response.json() as OptimizationResponse;
     },
     onSuccess: (data) => {
       setOptimizationResult(data);
