@@ -98,6 +98,14 @@ Maliyet hesaplaması şu faktörleri dikkate alır:
 - `SESSION_SECRET` - Express session secret (otomatik oluşturulur)
 
 ## Son Değişiklikler
+- **2025-11-12**: Auth ve Persistence eklendi
+  - PostgreSQL database entegrasyonu (users, calculations, favorites tabloları)
+  - Replit Auth ile kullanıcı girişi/çıkışı
+  - Geçmiş hesaplama kayıtları (otomatik kaydedilir)
+  - Favoriler sistemi (hesaplamaları favorilere ekleme/çıkarma)
+  - Navbar'a auth durumu ve navigasyon linkleri eklendi
+  - History ve Favorites sayfaları oluşturuldu
+  
 - **2025-11-11**: İlk versiyon oluşturuldu
   - Tüm frontend componentler tasarlandı ve geliştirildi
   - Backend API endpoint'leri implement edildi
