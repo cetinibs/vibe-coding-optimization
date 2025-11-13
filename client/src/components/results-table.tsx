@@ -1,6 +1,7 @@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { TrendingDown } from "lucide-react";
 import type { PlatformCalculation } from "@shared/schema";
 
 interface ResultsTableProps {
@@ -13,22 +14,27 @@ export function ResultsTable({ data }: ResultsTableProps) {
   const lowestCost = Math.min(...data.map(p => p.cost));
   
   return (
-    <Card data-testid="card-results-table">
+    <Card className="glass-card" data-testid="card-results-table">
       <CardHeader>
-        <CardTitle className="text-2xl lg:text-3xl">Platform Karşılaştırması</CardTitle>
-        <CardDescription>
+        <div className="flex items-center gap-3 mb-2">
+          <div className="w-10 h-10 rounded-lg gradient-bg-secondary flex items-center justify-center">
+            <TrendingDown className="w-5 h-5 text-primary-foreground" />
+          </div>
+          <h2 className="text-2xl lg:text-3xl font-bold gradient-text">Platform Karşılaştırması</h2>
+        </div>
+        <p className="text-muted-foreground ml-13">
           Her platform için tahmini prompt sayısı, token kullanımı ve maliyet
-        </CardDescription>
+        </p>
       </CardHeader>
       <CardContent>
-        <div className="overflow-x-auto">
+        <div className="overflow-x-auto rounded-lg border border-primary/20">
           <Table>
-            <TableHeader className="sticky top-0 bg-card">
-              <TableRow>
-                <TableHead className="font-semibold">Platform</TableHead>
-                <TableHead className="text-right font-semibold">Prompt Sayısı</TableHead>
-                <TableHead className="text-right font-semibold">Token Kullanımı</TableHead>
-                <TableHead className="text-right font-semibold">Maliyet (₺)</TableHead>
+            <TableHeader className="sticky top-0 bg-gradient-to-r from-primary/5 to-secondary/5">
+              <TableRow className="border-primary/20">
+                <TableHead className="font-bold text-foreground">Platform</TableHead>
+                <TableHead className="text-right font-bold text-foreground">Prompt Sayısı</TableHead>
+                <TableHead className="text-right font-bold text-foreground">Token Kullanımı</TableHead>
+                <TableHead className="text-right font-bold text-foreground">Maliyet (₺)</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -37,25 +43,27 @@ export function ResultsTable({ data }: ResultsTableProps) {
                 return (
                   <TableRow 
                     key={item.platform}
-                    className={`${index % 2 === 0 ? 'bg-muted/30' : ''} animate-in fade-in`}
+                    className={`border-primary/10 hover-elevate transition-all duration-200 animate-in fade-in ${
+                      isLowest ? 'bg-primary/5' : index % 2 === 0 ? 'bg-background/50' : 'bg-muted/20'
+                    }`}
                     style={{ animationDelay: `${index * 50}ms` }}
                     data-testid={`row-platform-${item.platform.toLowerCase().replace(/\s+/g, '-')}`}
                   >
                     <TableCell className="font-semibold flex items-center gap-2">
-                      {item.platform}
+                      <span className="text-foreground">{item.platform}</span>
                       {isLowest && (
-                        <Badge variant="default" className="text-xs" data-testid="badge-lowest-cost">
+                        <Badge className="text-xs gradient-bg-primary text-primary-foreground" data-testid="badge-lowest-cost">
                           En Uygun
                         </Badge>
                       )}
                     </TableCell>
-                    <TableCell className="text-right font-mono" data-testid={`text-prompt-count-${item.platform.toLowerCase().replace(/\s+/g, '-')}`}>
+                    <TableCell className="text-right font-mono text-muted-foreground" data-testid={`text-prompt-count-${item.platform.toLowerCase().replace(/\s+/g, '-')}`}>
                       {item.promptCount.toLocaleString('tr-TR')}
                     </TableCell>
-                    <TableCell className="text-right font-mono" data-testid={`text-token-count-${item.platform.toLowerCase().replace(/\s+/g, '-')}`}>
+                    <TableCell className="text-right font-mono text-muted-foreground" data-testid={`text-token-count-${item.platform.toLowerCase().replace(/\s+/g, '-')}`}>
                       {item.tokenCount.toLocaleString('tr-TR')}
                     </TableCell>
-                    <TableCell className="text-right font-mono font-semibold" data-testid={`text-cost-${item.platform.toLowerCase().replace(/\s+/g, '-')}`}>
+                    <TableCell className="text-right font-mono font-bold text-foreground" data-testid={`text-cost-${item.platform.toLowerCase().replace(/\s+/g, '-')}`}>
                       ₺{item.cost.toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                     </TableCell>
                   </TableRow>

@@ -29,35 +29,42 @@ export function InputForm({
   const isValid = charCount >= 10;
 
   return (
-    <div className="space-y-4">
-      <div className="space-y-2">
-        <Label htmlFor="app-idea" className="text-lg font-semibold">
-          Uygulama Fikrinizi Girin
-        </Label>
+    <div className="glass-card p-8 space-y-6">
+      <div className="space-y-4">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-lg gradient-bg-primary flex items-center justify-center">
+            <Calculator className="w-5 h-5 text-primary-foreground" />
+          </div>
+          <Label htmlFor="app-idea" className="text-2xl font-bold gradient-text">
+            Uygulama Fikrinizi Girin
+          </Label>
+        </div>
+        
         <Textarea
           id="app-idea"
           data-testid="input-app-idea"
           placeholder="Örnek: E-ticaret sitesi için ürün öneri sistemi geliştirmek istiyorum. Kullanıcıların geçmiş alışverişlerine göre kişiselleştirilmiş öneriler sunacak..."
           value={value}
           onChange={(e) => onChange(e.target.value)}
-          className="min-h-[200px] resize-none text-base"
+          className="min-h-[200px] resize-none text-base bg-background/50 border-primary/20 focus:border-primary/40 transition-colors"
           aria-label="Uygulama fikri girişi"
         />
+        
         <div className="flex items-center justify-between">
           <p className="text-sm text-muted-foreground">
             {!isValid && charCount > 0 && (
-              <span className="text-destructive">En az 10 karakter gerekli</span>
+              <span className="text-destructive font-medium">En az 10 karakter gerekli</span>
             )}
           </p>
-          <p className="text-sm text-muted-foreground" data-testid="text-char-count">
-            {charCount} karakter
+          <p className="text-sm text-muted-foreground font-medium" data-testid="text-char-count">
+            {charCount} / 1000 karakter
           </p>
         </div>
       </div>
 
       {error && (
-        <Alert variant="destructive" data-testid="alert-error">
-          <AlertDescription>{error}</AlertDescription>
+        <Alert variant="destructive" className="border-destructive/50 bg-destructive/10" data-testid="alert-error">
+          <AlertDescription className="font-medium">{error}</AlertDescription>
         </Alert>
       )}
 
@@ -65,19 +72,19 @@ export function InputForm({
         <Button
           onClick={onCalculate}
           disabled={!isValid || isCalculating || isOptimizing}
-          className="flex-1"
+          className="flex-1 gradient-bg-primary text-primary-foreground hover-glow"
           size="lg"
           data-testid="button-calculate"
         >
           <Calculator className="w-5 h-5 mr-2" />
-          {isCalculating ? "Hesaplanıyor..." : "Hesapla"}
+          {isCalculating ? "Hesaplanıyor..." : "Maliyeti Hesapla"}
         </Button>
 
         <Button
           onClick={onOptimize}
           disabled={!isValid || isCalculating || isOptimizing}
-          variant="secondary"
-          className="flex-1"
+          variant="outline"
+          className="flex-1 border-primary/30"
           size="lg"
           data-testid="button-optimize"
         >
