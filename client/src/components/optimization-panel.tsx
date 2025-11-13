@@ -3,7 +3,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { ArrowDown, TrendingDown, Copy, Check, ExternalLink, Code2, Wind, Sparkles, Zap, Share2 } from "lucide-react";
+import { ArrowDown, TrendingDown, Copy, Check, ExternalLink, Code2, Wind, Sparkles, Zap, Share2, MessageSquare } from "lucide-react";
 import { SiOpenai, SiAnthropic, SiGoogle, SiReplit, SiX, SiLinkedin, SiFacebook, SiWhatsapp, SiTelegram } from "react-icons/si";
 import { Mail } from "lucide-react";
 import ReactMarkdown from "react-markdown";
@@ -23,6 +23,7 @@ const iconMap: Record<string, any> = {
   "Wind": Wind,
   "Sparkles": Sparkles,
   "Zap": Zap,
+  "MessageSquare": MessageSquare,
 };
 
 export function OptimizationPanel({ data }: OptimizationPanelProps) {
@@ -314,19 +315,25 @@ export function OptimizationPanel({ data }: OptimizationPanelProps) {
                     key={link.name}
                     onClick={handleClick}
                     data-testid={`link-ai-${link.name.toLowerCase()}`}
+                    className="group"
                   >
-                    <Button
-                      variant="outline"
-                      className="w-full flex-col gap-2 hover-elevate active-elevate-2"
-                      size="lg"
-                      asChild
-                    >
-                      <div>
-                        {Icon && <Icon className="w-6 h-6" />}
-                        <span className="text-sm font-medium">{link.name}</span>
-                        <ExternalLink className="w-3 h-3 text-muted-foreground" />
-                      </div>
-                    </Button>
+                    <div className="space-y-2">
+                      <p className="text-xs text-muted-foreground text-center">
+                        Chat with {link.name}
+                      </p>
+                      <Button
+                        variant="outline"
+                        className="w-full flex-col gap-2"
+                        size="lg"
+                        asChild
+                      >
+                        <div>
+                          {Icon && <Icon className="w-6 h-6" />}
+                          <span className="text-sm font-medium">{link.name}</span>
+                          <ExternalLink className="w-3 h-3 text-muted-foreground" />
+                        </div>
+                      </Button>
+                    </div>
                   </button>
                 );
               })}

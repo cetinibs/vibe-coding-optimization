@@ -25,6 +25,11 @@ function generateAIModelLinks(prompt: string): AIModelLink[] {
       icon: "SiAnthropic"
     },
     {
+      name: "Perplexity",
+      url: "https://www.perplexity.ai/",
+      icon: "MessageSquare"
+    },
+    {
       name: "Gemini",
       url: "https://gemini.google.com/app",
       icon: "SiGoogle"

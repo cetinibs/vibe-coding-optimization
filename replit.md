@@ -98,14 +98,15 @@ Maliyet hesaplaması şu faktörleri dikkate alır:
 - `SESSION_SECRET` - Express session secret (otomatik oluşturulur)
 
 ## Son Değişiklikler
-- **2025-11-13**: Sosyal Medya Paylaşım Özelliği
-  - Optimize edilmiş promptları sosyal medyada paylaşma butonu eklendi
-  - Desteklenen platformlar: Twitter/X, LinkedIn, Facebook, WhatsApp, Telegram, Email
-  - Dropdown menü ile kullanıcı dostu arayüz
-  - Click-outside-to-close davranışı (useRef ile)
-  - Glassmorphism stil ile modern tasarım
+- **2025-11-13**: AI Model Linkleri ve Sosyal Paylaşım Güncellemeleri
+  - AI model linklerine "Chat with {Platform}" etiketleri eklendi
+  - Perplexity AI platformu eklendi (toplam 9 platform)
+  - AI linkleri optimize edilmiş prompt ile otomatik kopyalama yapıyor
+  - Sosyal medya paylaşım özelliği: Twitter/X, LinkedIn, Facebook, WhatsApp, Telegram, Email
+  - Glassmorphism stil dropdown menü (click-outside-to-close)
   - Toast bildirimleri ile kullanıcı geri bildirimi
-  - Backend /api/optimize endpoint'inde eksik fieldlar (formattedPrompt, aiModelLinks) düzeltildi
+  - Backend /api/optimize endpoint'inde eksik fieldlar düzeltildi
+  - OpenAI model gpt-4-turbo'ya güncellendi
 
 - **2025-11-12**: Auth ve Persistence eklendi
   - PostgreSQL database entegrasyonu (users, calculations, favorites tabloları)
