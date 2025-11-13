@@ -285,7 +285,7 @@ export function OptimizationPanel({ data }: OptimizationPanelProps) {
             <div className="space-y-2">
               <h3 className="font-semibold text-lg">AI Platformlarına Hızlı Erişim</h3>
               <p className="text-sm text-muted-foreground">
-                Promptu kopyaladıktan sonra tercih ettiğiniz AI platformunda kullanın
+                Optimize edilmiş prompt otomatik kopyalanır, platformda Ctrl+V ile yapıştırın
               </p>
             </div>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
@@ -296,8 +296,8 @@ export function OptimizationPanel({ data }: OptimizationPanelProps) {
                   try {
                     await navigator.clipboard.writeText(data.optimizedPrompt);
                     toast({
-                      title: "Prompt Kopyalandı!",
-                      description: `${link.name} açılıyor. Promptu yapıştırın.`,
+                      title: "Optimize Edilmiş Prompt Kopyalandı!",
+                      description: `${link.name} açılıyor. Ctrl+V ile yapıştırın.`,
                     });
                     window.open(link.url, '_blank');
                   } catch (err) {
