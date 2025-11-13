@@ -1,13 +1,51 @@
+import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { ArrowDown, TrendingDown } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { ArrowDown, TrendingDown, Copy, Check, ExternalLink, Code2, Wind, Sparkles, Zap } from "lucide-react";
+import { SiOpenai, SiAnthropic, SiGoogle, SiReplit } from "react-icons/si";
+import ReactMarkdown from "react-markdown";
 import type { OptimizationResponse } from "@shared/schema";
+import { useToast } from "@/hooks/use-toast";
 
 interface OptimizationPanelProps {
   data: OptimizationResponse;
 }
 
+const iconMap: Record<string, any> = {
+  "SiOpenai": SiOpenai,
+  "SiAnthropic": SiAnthropic,
+  "SiGoogle": SiGoogle,
+  "SiReplit": SiReplit,
+  "Code2": Code2,
+  "Wind": Wind,
+  "Sparkles": Sparkles,
+  "Zap": Zap,
+};
+
 export function OptimizationPanel({ data }: OptimizationPanelProps) {
+  const [copiedField, setCopiedField] = useState<string | null>(null);
+  const { toast } = useToast();
+
+  const copyToClipboard = async (text: string, field: string) => {
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopiedField(field);
+      toast({
+        title: "Kopyalandı!",
+        description: "Prompt panoya kopyalandı",
+      });
+      setTimeout(() => setCopiedField(null), 2000);
+    } catch (err) {
+      toast({
+        title: "Hata",
+        description: "Kopyalama başarısız oldu",
+        variant: "destructive",
+      });
+    }
+  };
+
   return (
     <Card data-testid="card-optimization">
       <CardHeader>
@@ -16,8 +54,8 @@ export function OptimizationPanel({ data }: OptimizationPanelProps) {
           AI tarafından optimize edilmiş prompt ile karşılaştırma
         </CardDescription>
       </CardHeader>
-      <CardContent>
-        <div className="flex flex-wrap items-center gap-4 mb-6">
+      <CardContent className="space-y-6">
+        <div className="flex flex-wrap items-center gap-4">
           <Badge variant="default" className="text-base px-4 py-2" data-testid="badge-token-reduction">
             <ArrowDown className="w-4 h-4 mr-1" />
             %{data.tokenReduction.toFixed(1)} Token Azalması
@@ -28,37 +66,138 @@ export function OptimizationPanel({ data }: OptimizationPanelProps) {
           </Badge>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-6">
-          <div className="space-y-2">
-            <div className="flex items-center justify-between">
-              <h3 className="font-semibold text-lg">Orijinal Prompt</h3>
-              <span className="text-sm text-muted-foreground font-mono" data-testid="text-original-tokens">
-                {data.originalTokenCount.toLocaleString('tr-TR')} token
-              </span>
-            </div>
-            <div 
-              className="bg-muted/50 rounded-md p-4 border font-mono text-sm whitespace-pre-wrap min-h-[150px]"
-              data-testid="text-original-prompt"
-            >
-              {data.originalPrompt}
-            </div>
-          </div>
+        <Tabs defaultValue="formatted" className="w-full">
+          <TabsList className="grid w-full grid-cols-3">
+            <TabsTrigger value="formatted" data-testid="tab-formatted">Formatlı</TabsTrigger>
+            <TabsTrigger value="comparison" data-testid="tab-comparison">Karşılaştırma</TabsTrigger>
+            <TabsTrigger value="links" data-testid="tab-links">AI Model Linkleri</TabsTrigger>
+          </TabsList>
 
-          <div className="space-y-2">
+          <TabsContent value="formatted" className="space-y-4">
             <div className="flex items-center justify-between">
               <h3 className="font-semibold text-lg">Optimize Edilmiş Prompt</h3>
-              <span className="text-sm text-muted-foreground font-mono" data-testid="text-optimized-tokens">
-                {data.optimizedTokenCount.toLocaleString('tr-TR')} token
-              </span>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => copyToClipboard(data.formattedPrompt, "formatted")}
+                data-testid="button-copy-formatted"
+              >
+                {copiedField === "formatted" ? (
+                  <Check className="w-4 h-4 mr-2" />
+                ) : (
+                  <Copy className="w-4 h-4 mr-2" />
+                )}
+                Kopyala
+              </Button>
             </div>
             <div 
-              className="bg-primary/5 rounded-md p-4 border border-primary/20 font-mono text-sm whitespace-pre-wrap min-h-[150px]"
-              data-testid="text-optimized-prompt"
+              className="bg-gradient-to-br from-primary/5 to-primary/10 rounded-lg p-6 border border-primary/20 prose prose-sm max-w-none"
+              data-testid="text-formatted-prompt"
             >
-              {data.optimizedPrompt}
+              <ReactMarkdown>{data.formattedPrompt}</ReactMarkdown>
             </div>
-          </div>
-        </div>
+          </TabsContent>
+
+          <TabsContent value="comparison">
+            <div className="grid md:grid-cols-2 gap-6">
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <h3 className="font-semibold text-lg">Orijinal</h3>
+                  <span className="text-sm text-muted-foreground font-mono" data-testid="text-original-tokens">
+                    {data.originalTokenCount.toLocaleString('tr-TR')} token
+                  </span>
+                </div>
+                <div 
+                  className="bg-muted/50 rounded-md p-4 border font-mono text-sm whitespace-pre-wrap min-h-[200px]"
+                  data-testid="text-original-prompt"
+                >
+                  {data.originalPrompt}
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <h3 className="font-semibold text-lg">Optimize Edilmiş</h3>
+                  <div className="flex items-center gap-2">
+                    <span className="text-sm text-muted-foreground font-mono" data-testid="text-optimized-tokens">
+                      {data.optimizedTokenCount.toLocaleString('tr-TR')} token
+                    </span>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => copyToClipboard(data.optimizedPrompt, "optimized")}
+                      data-testid="button-copy-optimized"
+                    >
+                      {copiedField === "optimized" ? (
+                        <Check className="w-4 h-4" />
+                      ) : (
+                        <Copy className="w-4 h-4" />
+                      )}
+                    </Button>
+                  </div>
+                </div>
+                <div 
+                  className="bg-primary/5 rounded-md p-4 border border-primary/20 font-mono text-sm whitespace-pre-wrap min-h-[200px]"
+                  data-testid="text-optimized-prompt"
+                >
+                  {data.optimizedPrompt}
+                </div>
+              </div>
+            </div>
+          </TabsContent>
+
+          <TabsContent value="links" className="space-y-4">
+            <div className="space-y-2">
+              <h3 className="font-semibold text-lg">AI Platformlarına Hızlı Erişim</h3>
+              <p className="text-sm text-muted-foreground">
+                Promptu kopyaladıktan sonra tercih ettiğiniz AI platformunda kullanın
+              </p>
+            </div>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+              {data.aiModelLinks.map((link) => {
+                const Icon = iconMap[link.icon];
+                const handleClick = async (e: React.MouseEvent) => {
+                  e.preventDefault();
+                  try {
+                    await navigator.clipboard.writeText(data.optimizedPrompt);
+                    toast({
+                      title: "Prompt Kopyalandı!",
+                      description: `${link.name} açılıyor. Promptu yapıştırın.`,
+                    });
+                    window.open(link.url, '_blank');
+                  } catch (err) {
+                    toast({
+                      title: "Hata",
+                      description: "Kopyalama başarısız oldu",
+                      variant: "destructive",
+                    });
+                  }
+                };
+                
+                return (
+                  <button
+                    key={link.name}
+                    onClick={handleClick}
+                    data-testid={`link-ai-${link.name.toLowerCase()}`}
+                  >
+                    <Button
+                      variant="outline"
+                      className="w-full flex-col gap-2 hover-elevate active-elevate-2"
+                      size="lg"
+                      asChild
+                    >
+                      <div>
+                        {Icon && <Icon className="w-6 h-6" />}
+                        <span className="text-sm font-medium">{link.name}</span>
+                        <ExternalLink className="w-3 h-3 text-muted-foreground" />
+                      </div>
+                    </Button>
+                  </button>
+                );
+              })}
+            </div>
+          </TabsContent>
+        </Tabs>
       </CardContent>
     </Card>
   );

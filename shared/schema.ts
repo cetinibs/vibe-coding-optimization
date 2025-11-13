@@ -97,12 +97,21 @@ export const optimizationRequestSchema = z.object({
 
 export type OptimizationRequest = z.infer<typeof optimizationRequestSchema>;
 
+// AI Model link
+export interface AIModelLink {
+  name: string;
+  url: string;
+  icon: string; // icon name from lucide-react or react-icons
+}
+
 // Optimization response
 export interface OptimizationResponse {
   originalPrompt: string;
   optimizedPrompt: string;
+  formattedPrompt: string; // markdown formatted version
   originalTokenCount: number;
   optimizedTokenCount: number;
   tokenReduction: number; // percentage
   costSavings: number; // percentage
+  aiModelLinks: AIModelLink[]; // direct links to AI models
 }

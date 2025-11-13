@@ -1,6 +1,6 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Calculator } from "lucide-react";
+import { Calculator, Sparkles, Zap } from "lucide-react";
 
 const platforms = [
   "Codex CLI",
@@ -24,38 +24,74 @@ export function Hero() {
   };
 
   return (
-    <section className="py-16 lg:py-24 border-b">
-      <div className="max-w-7xl mx-auto px-4 lg:px-8 text-center">
-        <h1 className="text-4xl lg:text-5xl font-bold mb-4" data-testid="text-hero-title">
-          AI Platformlarının Maliyetini Karşılaştırın
+    <section className="relative min-h-[600px] lg:min-h-[700px] flex items-center justify-center overflow-hidden">
+      {/* Gradient Background */}
+      <div className="absolute inset-0 gradient-bg-hero" />
+      
+      {/* Animated gradient orbs */}
+      <div className="absolute top-20 left-10 w-72 h-72 bg-primary/30 rounded-full blur-3xl animate-pulse" />
+      <div className="absolute bottom-20 right-10 w-96 h-96 bg-accent/20 rounded-full blur-3xl animate-pulse delay-1000" />
+      
+      <div className="relative z-10 max-w-7xl mx-auto px-4 lg:px-8 text-center py-20">
+        {/* Badge */}
+        <div className="inline-flex items-center gap-2 glass-card px-4 py-2 rounded-full mb-6 hover-glow" data-testid="badge-hero-label">
+          <Sparkles className="w-4 h-4 text-primary" />
+          <span className="text-sm font-semibold">AI Maliyet Hesaplayıcı</span>
+        </div>
+
+        {/* Main Heading */}
+        <h1 className="text-5xl lg:text-7xl font-bold mb-6 leading-tight" data-testid="text-hero-title">
+          <span className="gradient-text">AI Platformlarının</span>
+          <br />
+          <span className="text-foreground">Maliyetini Karşılaştırın</span>
         </h1>
-        <p className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto" data-testid="text-hero-description">
-          Uygulama fikrinizi girin, farklı AI kod platformlarında ortalama ne kadar prompt, 
-          token ve maliyet gerektireceğini anında öğrenin. Prompt'larınızı optimize edin, 
+        
+        <p className="text-lg lg:text-xl text-muted-foreground mb-10 max-w-3xl mx-auto leading-relaxed" data-testid="text-hero-description">
+          Uygulama fikrinizi girin, 9 farklı AI kod platformunda ortalama prompt sayısı, 
+          token kullanımı ve maliyeti anında öğrenin. OpenAI ile prompt'larınızı optimize edin, 
           maliyetleri düşürün.
         </p>
 
-        <Button 
-          size="lg" 
-          onClick={scrollToForm}
-          className="mb-12"
-          data-testid="button-hero-cta"
-        >
-          <Calculator className="w-5 h-5 mr-2" />
-          Hesaplamaya Başla
-        </Button>
+        {/* CTA Buttons */}
+        <div className="flex flex-wrap items-center justify-center gap-4 mb-16">
+          <Button 
+            size="lg" 
+            onClick={scrollToForm}
+            className="gradient-bg-primary text-primary-foreground hover-glow"
+            data-testid="button-hero-cta"
+          >
+            <Calculator className="w-5 h-5 mr-2" />
+            Hesaplamaya Başla
+          </Button>
+          
+          <Button 
+            size="lg" 
+            variant="outline"
+            onClick={scrollToForm}
+            className="glass-card"
+            data-testid="button-hero-secondary"
+          >
+            <Zap className="w-5 h-5 mr-2" />
+            Prompt Optimize Et
+          </Button>
+        </div>
 
-        <div className="flex flex-wrap items-center justify-center gap-3" data-testid="container-platforms">
-          {platforms.map((platform) => (
-            <Badge 
-              key={platform} 
-              variant="secondary" 
-              className="text-sm font-mono"
-              data-testid={`badge-platform-${platform.toLowerCase().replace(/\s+/g, '-')}`}
-            >
-              {platform}
-            </Badge>
-          ))}
+        {/* Platform Badges */}
+        <div className="space-y-3">
+          <p className="text-sm text-muted-foreground font-semibold uppercase tracking-wide">
+            Desteklenen Platformlar
+          </p>
+          <div className="flex flex-wrap items-center justify-center gap-3" data-testid="container-platforms">
+            {platforms.map((platform) => (
+              <div
+                key={platform}
+                className="glass-card px-4 py-2 rounded-lg hover-elevate active-elevate-2 transition-all"
+                data-testid={`badge-platform-${platform.toLowerCase().replace(/\s+/g, '-')}`}
+              >
+                <span className="text-sm font-mono font-semibold">{platform}</span>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </section>

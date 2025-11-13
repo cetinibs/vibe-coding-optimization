@@ -11,7 +11,7 @@ export function Navbar() {
   const typedUser = user as User | undefined;
 
   return (
-    <nav className="sticky top-0 z-50 bg-background/80 backdrop-blur-sm border-b h-16 flex items-center">
+    <nav className="sticky top-0 z-50 glass-navbar h-16 flex items-center">
       <div className="max-w-7xl mx-auto px-4 lg:px-8 w-full flex items-center justify-between gap-4">
         <button 
           onClick={() => setLocation("/")}
