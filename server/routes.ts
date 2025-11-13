@@ -81,10 +81,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const response: OptimizationResponse = {
         originalPrompt: validatedData.originalPrompt,
         optimizedPrompt: result.optimizedPrompt,
+        formattedPrompt: result.formattedPrompt,
+        aiModelLinks: result.aiModelLinks,
         originalTokenCount: result.originalTokenCount,
         optimizedTokenCount: result.optimizedTokenCount,
         tokenReduction: Math.max(0, tokenReduction),
-        costSavings: Math.max(0, tokenReduction), // Cost savings proportional to token reduction
+        costSavings: Math.max(0, tokenReduction),
       };
       
       res.json(response);
