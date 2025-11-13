@@ -98,6 +98,15 @@ Maliyet hesaplaması şu faktörleri dikkate alır:
 - `SESSION_SECRET` - Express session secret (otomatik oluşturulur)
 
 ## Son Değişiklikler
+- **2025-11-13**: Sosyal Medya Paylaşım Özelliği
+  - Optimize edilmiş promptları sosyal medyada paylaşma butonu eklendi
+  - Desteklenen platformlar: Twitter/X, LinkedIn, Facebook, WhatsApp, Telegram, Email
+  - Dropdown menü ile kullanıcı dostu arayüz
+  - Click-outside-to-close davranışı (useRef ile)
+  - Glassmorphism stil ile modern tasarım
+  - Toast bildirimleri ile kullanıcı geri bildirimi
+  - Backend /api/optimize endpoint'inde eksik fieldlar (formattedPrompt, aiModelLinks) düzeltildi
+
 - **2025-11-12**: Auth ve Persistence eklendi
   - PostgreSQL database entegrasyonu (users, calculations, favorites tabloları)
   - Replit Auth ile kullanıcı girişi/çıkışı

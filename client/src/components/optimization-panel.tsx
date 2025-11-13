@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { ArrowDown, TrendingDown, Copy, Check, ExternalLink, Code2, Wind, Sparkles, Zap } from "lucide-react";
-import { SiOpenai, SiAnthropic, SiGoogle, SiReplit } from "react-icons/si";
+import { ArrowDown, TrendingDown, Copy, Check, ExternalLink, Code2, Wind, Sparkles, Zap, Share2 } from "lucide-react";
+import { SiOpenai, SiAnthropic, SiGoogle, SiReplit, SiX, SiLinkedin, SiFacebook, SiWhatsapp, SiTelegram } from "react-icons/si";
+import { Mail } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import type { OptimizationResponse } from "@shared/schema";
 import { useToast } from "@/hooks/use-toast";
@@ -26,7 +27,25 @@ const iconMap: Record<string, any> = {
 
 export function OptimizationPanel({ data }: OptimizationPanelProps) {
   const [copiedField, setCopiedField] = useState<string | null>(null);
+  const [showShareMenu, setShowShareMenu] = useState(false);
   const { toast } = useToast();
+  const shareMenuRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (shareMenuRef.current && !shareMenuRef.current.contains(event.target as Node)) {
+        setShowShareMenu(false);
+      }
+    };
+
+    if (showShareMenu) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [showShareMenu]);
 
   const copyToClipboard = async (text: string, field: string) => {
     try {
@@ -43,6 +62,43 @@ export function OptimizationPanel({ data }: OptimizationPanelProps) {
         description: "Kopyalama başarısız oldu",
         variant: "destructive",
       });
+    }
+  };
+
+  const shareToSocial = (platform: string) => {
+    const shareText = `AI Prompt Optimizasyonu\n\n${data.optimizedPrompt}\n\n%${data.tokenReduction.toFixed(1)} token azalması ile optimize edildi!`;
+    const shareUrl = window.location.href;
+    
+    let url = "";
+    
+    switch (platform) {
+      case "twitter":
+        url = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}`;
+        break;
+      case "linkedin":
+        url = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}`;
+        break;
+      case "facebook":
+        url = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}&quote=${encodeURIComponent(shareText)}`;
+        break;
+      case "whatsapp":
+        url = `https://wa.me/?text=${encodeURIComponent(shareText)}`;
+        break;
+      case "telegram":
+        url = `https://t.me/share/url?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(shareText)}`;
+        break;
+      case "email":
+        url = `mailto:?subject=${encodeURIComponent("AI Prompt Optimizasyonu")}&body=${encodeURIComponent(shareText)}`;
+        break;
+    }
+    
+    if (url) {
+      window.open(url, "_blank", "noopener,noreferrer,width=600,height=600");
+      toast({
+        title: "Paylaşım Açıldı",
+        description: `${platform.charAt(0).toUpperCase() + platform.slice(1)} paylaşım penceresi açıldı`,
+      });
+      setShowShareMenu(false);
     }
   };
 
@@ -74,21 +130,100 @@ export function OptimizationPanel({ data }: OptimizationPanelProps) {
           </TabsList>
 
           <TabsContent value="formatted" className="space-y-4">
-            <div className="flex items-center justify-between">
+            <div className="flex flex-wrap items-center justify-between gap-2">
               <h3 className="font-semibold text-lg">Optimize Edilmiş Prompt</h3>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => copyToClipboard(data.formattedPrompt, "formatted")}
-                data-testid="button-copy-formatted"
-              >
-                {copiedField === "formatted" ? (
-                  <Check className="w-4 h-4 mr-2" />
-                ) : (
-                  <Copy className="w-4 h-4 mr-2" />
-                )}
-                Kopyala
-              </Button>
+              <div className="flex items-center gap-2">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => copyToClipboard(data.formattedPrompt, "formatted")}
+                  data-testid="button-copy-formatted"
+                >
+                  {copiedField === "formatted" ? (
+                    <Check className="w-4 h-4 mr-2" />
+                  ) : (
+                    <Copy className="w-4 h-4 mr-2" />
+                  )}
+                  Kopyala
+                </Button>
+                <div className="relative" ref={shareMenuRef}>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setShowShareMenu(!showShareMenu)}
+                    data-testid="button-share-toggle"
+                  >
+                    <Share2 className="w-4 h-4 mr-2" />
+                    Paylaş
+                  </Button>
+                  {showShareMenu && (
+                    <div className="absolute right-0 top-full mt-2 bg-card/95 backdrop-blur-sm border rounded-lg shadow-lg p-2 z-10 min-w-[200px]">
+                      <div className="space-y-1">
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="w-full justify-start"
+                          onClick={() => shareToSocial("twitter")}
+                          data-testid="button-share-twitter"
+                        >
+                          <SiX className="w-4 h-4 mr-2" />
+                          Twitter/X
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="w-full justify-start"
+                          onClick={() => shareToSocial("linkedin")}
+                          data-testid="button-share-linkedin"
+                        >
+                          <SiLinkedin className="w-4 h-4 mr-2" />
+                          LinkedIn
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="w-full justify-start"
+                          onClick={() => shareToSocial("facebook")}
+                          data-testid="button-share-facebook"
+                        >
+                          <SiFacebook className="w-4 h-4 mr-2" />
+                          Facebook
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="w-full justify-start"
+                          onClick={() => shareToSocial("whatsapp")}
+                          data-testid="button-share-whatsapp"
+                        >
+                          <SiWhatsapp className="w-4 h-4 mr-2" />
+                          WhatsApp
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="w-full justify-start"
+                          onClick={() => shareToSocial("telegram")}
+                          data-testid="button-share-telegram"
+                        >
+                          <SiTelegram className="w-4 h-4 mr-2" />
+                          Telegram
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="w-full justify-start"
+                          onClick={() => shareToSocial("email")}
+                          data-testid="button-share-email"
+                        >
+                          <Mail className="w-4 h-4 mr-2" />
+                          Email
+                        </Button>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
             </div>
             <div 
               className="bg-gradient-to-br from-primary/5 to-primary/10 rounded-lg p-6 border border-primary/20 prose prose-sm max-w-none"
