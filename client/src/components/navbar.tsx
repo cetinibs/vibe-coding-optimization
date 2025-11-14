@@ -1,14 +1,20 @@
-import { Calculator, History, Star, LogIn, LogOut } from "lucide-react";
+import { Calculator, History, Star, LogIn, LogOut, Languages } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useAuth } from "@/hooks/useAuth";
+import { useLanguage } from "@/lib/i18n/LanguageContext";
 import { Link, useLocation } from "wouter";
 import type { User } from "@shared/schema";
 
 export function Navbar() {
   const { user, isAuthenticated } = useAuth();
+  const { language, setLanguage, t } = useLanguage();
   const [, setLocation] = useLocation();
   const typedUser = user as User | undefined;
+
+  const toggleLanguage = () => {
+    setLanguage(language === "tr" ? "en" : "tr");
+  };
 
   return (
     <nav className="sticky top-0 z-50 glass-navbar h-16 flex items-center">
@@ -19,10 +25,21 @@ export function Navbar() {
           data-testid="button-home"
         >
           <Calculator className="w-6 h-6 text-primary" data-testid="icon-logo" />
-          <span className="font-semibold text-lg" data-testid="text-app-name">AI Maliyet Hesaplayıcı</span>
+          <span className="font-semibold text-lg" data-testid="text-app-name">{t.navbar.appName}</span>
         </button>
         
         <div className="flex items-center gap-2">
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={toggleLanguage}
+            data-testid="button-language-toggle"
+            className="font-medium"
+          >
+            <Languages className="w-4 h-4 mr-2" />
+            {language.toUpperCase()}
+          </Button>
+
           {isAuthenticated && (
             <>
               <Button 
@@ -32,7 +49,7 @@ export function Navbar() {
                 data-testid="button-history"
               >
                 <History className="w-4 h-4 mr-2" />
-                Geçmiş
+                {t.navbar.history}
               </Button>
               
               <Button 
@@ -42,7 +59,7 @@ export function Navbar() {
                 data-testid="button-favorites"
               >
                 <Star className="w-4 h-4 mr-2" />
-                Favoriler
+                {t.navbar.favorites}
               </Button>
               
               <div className="flex items-center gap-2 pl-2 border-l">
@@ -56,7 +73,7 @@ export function Navbar() {
                 <a href="/api/logout" data-testid="link-logout">
                   <Button variant="ghost" size="sm">
                     <LogOut className="w-4 h-4 mr-2" />
-                    Çıkış
+                    {t.navbar.logout}
                   </Button>
                 </a>
               </div>
@@ -67,7 +84,7 @@ export function Navbar() {
             <a href="/api/login" data-testid="link-login">
               <Button variant="default" size="sm">
                 <LogIn className="w-4 h-4 mr-2" />
-                Giriş Yap
+                {t.navbar.login}
               </Button>
             </a>
           )}
