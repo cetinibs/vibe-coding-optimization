@@ -109,9 +109,13 @@ export interface OptimizationResponse {
   originalPrompt: string;
   optimizedPrompt: string;
   formattedPrompt: string; // markdown formatted version
+  toonFormat: string; // TOON (Token-Oriented Object Notation) version
   originalTokenCount: number;
   optimizedTokenCount: number;
-  tokenReduction: number; // percentage
-  costSavings: number; // percentage
+  toonTokenCount: number; // TOON format token count
+  tokenReduction: number; // percentage (optimized vs original)
+  toonTokenReduction: number; // percentage (TOON vs optimized)
+  costSavings: number; // percentage (optimized vs original)
+  toonCostSavings: number; // percentage (TOON vs optimized)
   aiModelLinks: AIModelLink[]; // direct links to AI models
 }

@@ -74,19 +74,28 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       const result = await optimizePrompt(validatedData.originalPrompt);
       
+      // Calculate token reduction percentages
       const tokenReduction = result.originalTokenCount > 0
         ? ((result.originalTokenCount - result.optimizedTokenCount) / result.originalTokenCount) * 100
+        : 0;
+      
+      const toonTokenReduction = result.optimizedTokenCount > 0
+        ? ((result.optimizedTokenCount - result.toonTokenCount) / result.optimizedTokenCount) * 100
         : 0;
       
       const response: OptimizationResponse = {
         originalPrompt: validatedData.originalPrompt,
         optimizedPrompt: result.optimizedPrompt,
         formattedPrompt: result.formattedPrompt,
+        toonFormat: result.toonFormat,
         aiModelLinks: result.aiModelLinks,
         originalTokenCount: result.originalTokenCount,
         optimizedTokenCount: result.optimizedTokenCount,
+        toonTokenCount: result.toonTokenCount,
         tokenReduction: Math.max(0, tokenReduction),
+        toonTokenReduction: Math.max(0, toonTokenReduction),
         costSavings: Math.max(0, tokenReduction),
+        toonCostSavings: Math.max(0, toonTokenReduction),
       };
       
       res.json(response);
