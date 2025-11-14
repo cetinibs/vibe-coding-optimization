@@ -1,6 +1,7 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Calculator, Sparkles, Zap } from "lucide-react";
+import { useLanguage } from "@/lib/i18n/LanguageContext";
 
 const platforms = [
   "Codex CLI",
@@ -15,6 +16,8 @@ const platforms = [
 ];
 
 export function Hero() {
+  const { t } = useLanguage();
+  
   const scrollToForm = () => {
     const formElement = document.getElementById('app-idea');
     if (formElement) {
@@ -25,34 +28,25 @@ export function Hero() {
 
   return (
     <section className="relative min-h-[600px] lg:min-h-[700px] flex items-center justify-center overflow-hidden">
-      {/* Gradient Background */}
       <div className="absolute inset-0 gradient-bg-hero" />
       
-      {/* Animated gradient orbs */}
       <div className="absolute top-20 left-10 w-72 h-72 bg-primary/30 rounded-full blur-3xl animate-pulse" />
       <div className="absolute bottom-20 right-10 w-96 h-96 bg-accent/20 rounded-full blur-3xl animate-pulse delay-1000" />
       
       <div className="relative z-10 max-w-7xl mx-auto px-4 lg:px-8 text-center py-20">
-        {/* Badge */}
         <div className="inline-flex items-center gap-2 glass-card px-4 py-2 rounded-full mb-6 hover-glow" data-testid="badge-hero-label">
           <Sparkles className="w-4 h-4 text-primary" />
-          <span className="text-sm font-semibold">AI Maliyet Hesaplayıcı</span>
+          <span className="text-sm font-semibold">{t.hero.platforms}</span>
         </div>
 
-        {/* Main Heading */}
         <h1 className="text-5xl lg:text-7xl font-bold mb-6 leading-tight" data-testid="text-hero-title">
-          <span className="gradient-text">AI Platformlarının</span>
-          <br />
-          <span className="text-foreground">Maliyetini Karşılaştırın</span>
+          {t.hero.title}
         </h1>
         
         <p className="text-lg lg:text-xl text-muted-foreground mb-10 max-w-3xl mx-auto leading-relaxed" data-testid="text-hero-description">
-          Uygulama fikrinizi girin, 9 farklı AI kod platformunda ortalama prompt sayısı, 
-          token kullanımı ve maliyeti anında öğrenin. OpenAI ile prompt'larınızı optimize edin, 
-          maliyetleri düşürün.
+          {t.hero.subtitle}
         </p>
 
-        {/* CTA Buttons */}
         <div className="flex flex-wrap items-center justify-center gap-4 mb-16">
           <Button 
             size="lg" 
@@ -61,7 +55,7 @@ export function Hero() {
             data-testid="button-hero-cta"
           >
             <Calculator className="w-5 h-5 mr-2" />
-            Hesaplamaya Başla
+            {t.form.calculate}
           </Button>
           
           <Button 
@@ -72,14 +66,13 @@ export function Hero() {
             data-testid="button-hero-secondary"
           >
             <Zap className="w-5 h-5 mr-2" />
-            Prompt Optimize Et
+            {t.form.optimize}
           </Button>
         </div>
 
-        {/* Platform Badges */}
         <div className="space-y-3">
           <p className="text-sm text-muted-foreground font-semibold uppercase tracking-wide">
-            Desteklenen Platformlar
+            {t.hero.platforms}
           </p>
           <div className="flex flex-wrap items-center justify-center gap-3" data-testid="container-platforms">
             {platforms.map((platform) => (

@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { useLanguage } from "@/lib/i18n/LanguageContext";
 
 interface InputFormProps {
   value: string;
@@ -25,6 +26,7 @@ export function InputForm({
   isOptimizing,
   error,
 }: InputFormProps) {
+  const { t } = useLanguage();
   const charCount = value.length;
   const isValid = charCount >= 10;
 
@@ -36,28 +38,28 @@ export function InputForm({
             <Calculator className="w-5 h-5 text-primary-foreground" />
           </div>
           <Label htmlFor="app-idea" className="text-2xl font-bold gradient-text">
-            Uygulama Fikrinizi Girin
+            {t.form.title}
           </Label>
         </div>
         
         <Textarea
           id="app-idea"
           data-testid="input-app-idea"
-          placeholder="Örnek: E-ticaret sitesi için ürün öneri sistemi geliştirmek istiyorum. Kullanıcıların geçmiş alışverişlerine göre kişiselleştirilmiş öneriler sunacak..."
+          placeholder={t.form.placeholder}
           value={value}
           onChange={(e) => onChange(e.target.value)}
           className="min-h-[200px] resize-none text-base bg-background/50 border-primary/20 focus:border-primary/40 transition-colors"
-          aria-label="Uygulama fikri girişi"
+          aria-label={t.form.title}
         />
         
         <div className="flex items-center justify-between">
           <p className="text-sm text-muted-foreground">
             {!isValid && charCount > 0 && (
-              <span className="text-destructive font-medium">En az 10 karakter gerekli</span>
+              <span className="text-destructive font-medium">{t.form.minLength}</span>
             )}
           </p>
           <p className="text-sm text-muted-foreground font-medium" data-testid="text-char-count">
-            {charCount} / 1000 karakter
+            {charCount} / 1000
           </p>
         </div>
       </div>
@@ -77,7 +79,7 @@ export function InputForm({
           data-testid="button-calculate"
         >
           <Calculator className="w-5 h-5 mr-2" />
-          {isCalculating ? "Hesaplanıyor..." : "Maliyeti Hesapla"}
+          {isCalculating ? t.form.calculating : t.form.calculate}
         </Button>
 
         <Button
@@ -89,7 +91,7 @@ export function InputForm({
           data-testid="button-optimize"
         >
           <Sparkles className="w-5 h-5 mr-2" />
-          {isOptimizing ? "Optimize Ediliyor..." : "Promptu Optimize Et"}
+          {isOptimizing ? t.form.optimizing : t.form.optimize}
         </Button>
 
         <Button

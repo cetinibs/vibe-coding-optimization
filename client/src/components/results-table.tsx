@@ -2,6 +2,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { TrendingDown } from "lucide-react";
+import { useLanguage } from "@/lib/i18n/LanguageContext";
 import type { PlatformCalculation } from "@shared/schema";
 
 interface ResultsTableProps {
@@ -9,6 +10,8 @@ interface ResultsTableProps {
 }
 
 export function ResultsTable({ data }: ResultsTableProps) {
+  const { t } = useLanguage();
+  
   if (!data || data.length === 0) return null;
 
   const lowestCost = Math.min(...data.map(p => p.cost));
@@ -20,10 +23,10 @@ export function ResultsTable({ data }: ResultsTableProps) {
           <div className="w-10 h-10 rounded-lg gradient-bg-secondary flex items-center justify-center">
             <TrendingDown className="w-5 h-5 text-primary-foreground" />
           </div>
-          <h2 className="text-2xl lg:text-3xl font-bold gradient-text">Platform Karşılaştırması</h2>
+          <h2 className="text-2xl lg:text-3xl font-bold gradient-text">{t.results.title}</h2>
         </div>
         <p className="text-muted-foreground ml-13">
-          Her platform için tahmini prompt sayısı, token kullanımı ve maliyet
+          {t.visualization.description}
         </p>
       </CardHeader>
       <CardContent>
@@ -31,10 +34,10 @@ export function ResultsTable({ data }: ResultsTableProps) {
           <Table>
             <TableHeader className="sticky top-0 bg-gradient-to-r from-primary/5 to-secondary/5">
               <TableRow className="border-primary/20">
-                <TableHead className="font-bold text-foreground">Platform</TableHead>
-                <TableHead className="text-right font-bold text-foreground">Prompt Sayısı</TableHead>
-                <TableHead className="text-right font-bold text-foreground">Token Kullanımı</TableHead>
-                <TableHead className="text-right font-bold text-foreground">Maliyet (₺)</TableHead>
+                <TableHead className="font-bold text-foreground">{t.results.platform}</TableHead>
+                <TableHead className="text-right font-bold text-foreground">{t.results.prompts}</TableHead>
+                <TableHead className="text-right font-bold text-foreground">{t.results.tokens}</TableHead>
+                <TableHead className="text-right font-bold text-foreground">{t.results.cost}</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
