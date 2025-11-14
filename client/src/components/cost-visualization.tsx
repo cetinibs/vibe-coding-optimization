@@ -1,5 +1,6 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from "recharts";
+import { useLanguage } from "@/lib/i18n/LanguageContext";
 import type { PlatformCalculation } from "@shared/schema";
 
 interface CostVisualizationProps {
@@ -7,6 +8,8 @@ interface CostVisualizationProps {
 }
 
 export function CostVisualization({ data }: CostVisualizationProps) {
+  const { t } = useLanguage();
+  
   if (!data || data.length === 0) return null;
 
   const chartData = [...data]
@@ -21,9 +24,9 @@ export function CostVisualization({ data }: CostVisualizationProps) {
   return (
     <Card data-testid="card-visualization">
       <CardHeader>
-        <CardTitle className="text-2xl lg:text-3xl">Maliyet Görselleştirmesi</CardTitle>
+        <CardTitle className="text-2xl lg:text-3xl">{t.visualization.title}</CardTitle>
         <CardDescription>
-          Platform maliyetlerinin karşılaştırmalı grafik görünümü
+          {t.visualization.description}
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -47,7 +50,7 @@ export function CostVisualization({ data }: CostVisualizationProps) {
                 className="text-sm font-mono"
               />
               <Tooltip
-                formatter={(value: number) => [`₺${value.toFixed(2)}`, 'Maliyet']}
+                formatter={(value: number) => [`₺${value.toFixed(2)}`, t.visualization.cost]}
                 contentStyle={{
                   backgroundColor: 'hsl(var(--card))',
                   border: '1px solid hsl(var(--border))',

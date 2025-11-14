@@ -26,7 +26,7 @@ export function ResultsTable({ data }: ResultsTableProps) {
           <h2 className="text-2xl lg:text-3xl font-bold gradient-text">{t.results.title}</h2>
         </div>
         <p className="text-muted-foreground ml-13">
-          {t.visualization.description}
+          {t.results.subtitle}
         </p>
       </CardHeader>
       <CardContent>
@@ -56,7 +56,7 @@ export function ResultsTable({ data }: ResultsTableProps) {
                       <span className="text-foreground">{item.platform}</span>
                       {isLowest && (
                         <Badge className="text-xs gradient-bg-primary text-primary-foreground" data-testid="badge-lowest-cost">
-                          En Uygun
+                          {t.results.lowestCost}
                         </Badge>
                       )}
                     </TableCell>

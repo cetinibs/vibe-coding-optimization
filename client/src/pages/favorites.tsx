@@ -4,6 +4,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import { isUnauthorizedError } from "@/lib/authUtils";
+import { useLanguage } from "@/lib/i18n/LanguageContext";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { StarOff, Trash2 } from "lucide-react";
@@ -11,21 +12,22 @@ import { format } from "date-fns";
 import type { Calculation } from "@shared/schema";
 
 export default function FavoritesPage() {
+  const { t } = useLanguage();
   const { toast } = useToast();
   const { isAuthenticated, isLoading: authLoading } = useAuth();
 
   useEffect(() => {
     if (!authLoading && !isAuthenticated) {
       toast({
-        title: "Giriş Gerekli",
-        description: "Favorilerinizi görüntülemek için giriş yapın...",
+        title: t.common.loginRequired,
+        description: t.common.loginRequiredDesc,
         variant: "destructive",
       });
       setTimeout(() => {
         window.location.href = "/api/login";
       }, 500);
     }
-  }, [isAuthenticated, authLoading, toast]);
+  }, [isAuthenticated, authLoading, toast, t]);
 
   const { data: favorites, isLoading } = useQuery<Calculation[]>({
     queryKey: ["/api/favorites"],
@@ -39,15 +41,15 @@ export default function FavoritesPage() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/favorites"] });
       toast({
-        title: "Başarılı",
-        description: "Favorilerden çıkarıldı",
+        title: t.common.success,
+        description: t.common.removedFromFavorites,
       });
     },
     onError: (error) => {
       if (isUnauthorizedError(error)) {
         toast({
-          title: "Oturum Sona Erdi",
-          description: "Tekrar giriş yapın...",
+          title: t.common.sessionExpired,
+          description: t.common.sessionExpiredDesc,
           variant: "destructive",
         });
         setTimeout(() => {
@@ -56,8 +58,8 @@ export default function FavoritesPage() {
         return;
       }
       toast({
-        title: "Hata",
-        description: "Favorilerden çıkarılamadı",
+        title: t.common.error,
+        description: t.common.removeFromFavoritesFailed,
         variant: "destructive",
       });
     },
@@ -66,7 +68,7 @@ export default function FavoritesPage() {
   if (authLoading || !isAuthenticated) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <p className="text-muted-foreground">Yükleniyor...</p>
+        <p className="text-muted-foreground">{t.common.loading}</p>
       </div>
     );
   }
@@ -75,21 +77,21 @@ export default function FavoritesPage() {
     <div className="min-h-screen bg-background py-12">
       <div className="max-w-7xl mx-auto px-4 lg:px-8">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold mb-2" data-testid="text-page-title">Favori Hesaplamalar</h1>
+          <h1 className="text-3xl font-bold mb-2" data-testid="text-page-title">{t.favorites.title}</h1>
           <p className="text-muted-foreground" data-testid="text-page-description">
-            Favori olarak işaretlediğiniz hesaplamalar
+            {t.favorites.empty}
           </p>
         </div>
 
         {isLoading && (
-          <p className="text-center text-muted-foreground">Yükleniyor...</p>
+          <p className="text-center text-muted-foreground">{t.common.loading}</p>
         )}
 
         {!isLoading && favorites && favorites.length === 0 && (
           <Card>
             <CardContent className="p-12 text-center">
               <p className="text-muted-foreground" data-testid="text-empty-state">
-                Henüz favori hesaplama eklemediniz
+                {t.favorites.emptyDesc}
               </p>
             </CardContent>
           </Card>
@@ -126,7 +128,7 @@ export default function FavoritesPage() {
                 </CardHeader>
                 <CardContent>
                   <div className="text-sm space-y-2">
-                    <p className="font-semibold">En Uygun Platform:</p>
+                    <p className="font-semibold">{t.favorites.lowestPlatform}</p>
                     {results.map((result: any) => {
                       if (result.cost === lowestCost) {
                         return (

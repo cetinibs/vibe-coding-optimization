@@ -32,6 +32,7 @@ export const translations = {
     // Results Table
     results: {
       title: "Platform Karşılaştırması",
+      subtitle: "Her platform için tahmini prompt sayısı, token kullanımı ve maliyet",
       platform: "Platform",
       prompts: "Prompt Sayısı",
       tokens: "Token",
@@ -41,12 +42,14 @@ export const translations = {
       addedToFavorites: "Favorilere Eklendi",
       removedFromFavorites: "Favorilerden Çıkarıldı",
       loginRequired: "Favorilere eklemek için giriş yapmalısınız",
+      lowestCost: "En Uygun",
     },
     
     // Cost Visualization
     visualization: {
       title: "Maliyet Görselleştirmesi",
-      description: "Platform maliyetlerinin görsel karşılaştırması",
+      description: "Platform maliyetlerinin karşılaştırmalı grafik görünümü",
+      cost: "Maliyet",
     },
     
     // Optimization Panel
@@ -86,6 +89,7 @@ export const translations = {
       idea: "Uygulama Fikri",
       avgCost: "Ort. Maliyet",
       viewDetails: "Detayları Gör",
+      lowestPlatform: "En Uygun Platform:",
     },
     
     // Favorites Page
@@ -94,12 +98,15 @@ export const translations = {
       empty: "Henüz favori eklemediniz",
       emptyDesc: "Hesaplama sonuçlarından favori ekleyebilirsiniz",
       remove: "Kaldır",
+      lowestPlatform: "En Uygun Platform:",
     },
     
     // Footer
     footer: {
       madeWith: "ile yapıldı",
       by: "tarafından",
+      documentation: "Dokümantasyon",
+      github: "GitHub",
     },
     
     // Common
@@ -113,6 +120,16 @@ export const translations = {
       edit: "Düzenle",
       close: "Kapat",
       goHome: "Ana Sayfaya Dön",
+      loginRequired: "Giriş Gerekli",
+      loginRequiredDesc: "Bu özelliği kullanmak için giriş yapın",
+      sessionExpired: "Oturum Sona Erdi",
+      sessionExpiredDesc: "Tekrar giriş yapın...",
+      deleteFailed: "Silme işlemi başarısız oldu",
+      removed: "Kaldırıldı",
+      removedFromFavorites: "Favorilerden çıkarıldı",
+      removeFromFavoritesFailed: "Favorilerden çıkarılamadı",
+      shareOpened: "Paylaşım Açıldı",
+      shareOpenedDesc: "paylaşım penceresi açıldı",
     },
   },
   
@@ -149,6 +166,7 @@ export const translations = {
     // Results Table
     results: {
       title: "Platform Comparison",
+      subtitle: "Estimated prompt count, token usage, and cost for each platform",
       platform: "Platform",
       prompts: "Prompt Count",
       tokens: "Tokens",
@@ -158,12 +176,14 @@ export const translations = {
       addedToFavorites: "Added to Favorites",
       removedFromFavorites: "Removed from Favorites",
       loginRequired: "Please login to add favorites",
+      lowestCost: "Best Value",
     },
     
     // Cost Visualization
     visualization: {
       title: "Cost Visualization",
-      description: "Visual comparison of platform costs",
+      description: "Comparative chart view of platform costs",
+      cost: "Cost",
     },
     
     // Optimization Panel
@@ -203,6 +223,7 @@ export const translations = {
       idea: "App Idea",
       avgCost: "Avg. Cost",
       viewDetails: "View Details",
+      lowestPlatform: "Best Value Platform:",
     },
     
     // Favorites Page
@@ -211,12 +232,15 @@ export const translations = {
       empty: "No favorites yet",
       emptyDesc: "You can add favorites from calculation results",
       remove: "Remove",
+      lowestPlatform: "Best Value Platform:",
     },
     
     // Footer
     footer: {
       madeWith: "Made with",
       by: "by",
+      documentation: "Documentation",
+      github: "GitHub",
     },
     
     // Common
@@ -230,6 +254,16 @@ export const translations = {
       edit: "Edit",
       close: "Close",
       goHome: "Go Home",
+      loginRequired: "Login Required",
+      loginRequiredDesc: "Please login to use this feature",
+      sessionExpired: "Session Expired",
+      sessionExpiredDesc: "Please login again...",
+      deleteFailed: "Delete failed",
+      removed: "Removed",
+      removedFromFavorites: "Removed from favorites",
+      removeFromFavoritesFailed: "Failed to remove from favorites",
+      shareOpened: "Share Opened",
+      shareOpenedDesc: "share window opened",
     },
   },
 };

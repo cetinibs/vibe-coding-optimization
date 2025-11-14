@@ -9,6 +9,7 @@ import { Mail } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import type { OptimizationResponse } from "@shared/schema";
 import { useToast } from "@/hooks/use-toast";
+import { useLanguage } from "@/lib/i18n/LanguageContext";
 
 interface OptimizationPanelProps {
   data: OptimizationResponse;
@@ -27,6 +28,7 @@ const iconMap: Record<string, any> = {
 };
 
 export function OptimizationPanel({ data }: OptimizationPanelProps) {
+  const { t } = useLanguage();
   const [copiedField, setCopiedField] = useState<string | null>(null);
   const [showShareMenu, setShowShareMenu] = useState(false);
   const { toast } = useToast();
@@ -53,21 +55,21 @@ export function OptimizationPanel({ data }: OptimizationPanelProps) {
       await navigator.clipboard.writeText(text);
       setCopiedField(field);
       toast({
-        title: "Kopyalandı!",
-        description: "Prompt panoya kopyalandı",
+        title: t.optimization.copied,
+        description: t.optimization.copyPrompt,
       });
       setTimeout(() => setCopiedField(null), 2000);
     } catch (err) {
       toast({
-        title: "Hata",
-        description: "Kopyalama başarısız oldu",
+        title: t.common.error,
+        description: t.optimization.copyError,
         variant: "destructive",
       });
     }
   };
 
   const shareToSocial = (platform: string) => {
-    const shareText = `AI Prompt Optimizasyonu\n\n${data.optimizedPrompt}\n\n%${data.tokenReduction.toFixed(1)} token azalması ile optimize edildi!`;
+    const shareText = `${t.optimization.title}\n\n${data.optimizedPrompt}\n\n%${data.tokenReduction.toFixed(1)} ${t.optimization.tokenReduction}!`;
     const shareUrl = window.location.href;
     
     let url = "";
@@ -89,15 +91,15 @@ export function OptimizationPanel({ data }: OptimizationPanelProps) {
         url = `https://t.me/share/url?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(shareText)}`;
         break;
       case "email":
-        url = `mailto:?subject=${encodeURIComponent("AI Prompt Optimizasyonu")}&body=${encodeURIComponent(shareText)}`;
+        url = `mailto:?subject=${encodeURIComponent(t.optimization.title)}&body=${encodeURIComponent(shareText)}`;
         break;
     }
     
     if (url) {
       window.open(url, "_blank", "noopener,noreferrer,width=600,height=600");
       toast({
-        title: "Paylaşım Açıldı",
-        description: `${platform.charAt(0).toUpperCase() + platform.slice(1)} paylaşım penceresi açıldı`,
+        title: t.common.shareOpened,
+        description: `${platform.charAt(0).toUpperCase() + platform.slice(1)} ${t.common.shareOpenedDesc}`,
       });
       setShowShareMenu(false);
     }
@@ -106,33 +108,33 @@ export function OptimizationPanel({ data }: OptimizationPanelProps) {
   return (
     <Card data-testid="card-optimization">
       <CardHeader>
-        <CardTitle className="text-2xl lg:text-3xl">Prompt Optimizasyonu</CardTitle>
+        <CardTitle className="text-2xl lg:text-3xl">{t.optimization.title}</CardTitle>
         <CardDescription>
-          AI tarafından optimize edilmiş prompt ile karşılaştırma
+          {t.optimization.description}
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-6">
         <div className="flex flex-wrap items-center gap-4">
           <Badge variant="default" className="text-base px-4 py-2" data-testid="badge-token-reduction">
             <ArrowDown className="w-4 h-4 mr-1" />
-            %{data.tokenReduction.toFixed(1)} Token Azalması
+            %{data.tokenReduction.toFixed(1)} {t.optimization.tokenReduction}
           </Badge>
           <Badge variant="secondary" className="text-base px-4 py-2" data-testid="badge-cost-savings">
             <TrendingDown className="w-4 h-4 mr-1" />
-            %{data.costSavings.toFixed(1)} Maliyet Tasarrufu
+            %{data.costSavings.toFixed(1)} {t.optimization.costSavings}
           </Badge>
         </div>
 
         <Tabs defaultValue="formatted" className="w-full">
           <TabsList className="grid w-full grid-cols-3">
-            <TabsTrigger value="formatted" data-testid="tab-formatted">Formatlı</TabsTrigger>
-            <TabsTrigger value="comparison" data-testid="tab-comparison">Karşılaştırma</TabsTrigger>
-            <TabsTrigger value="links" data-testid="tab-links">AI Model Linkleri</TabsTrigger>
+            <TabsTrigger value="formatted" data-testid="tab-formatted">{t.optimization.tabs.formatted}</TabsTrigger>
+            <TabsTrigger value="comparison" data-testid="tab-comparison">{t.optimization.tabs.optimized}</TabsTrigger>
+            <TabsTrigger value="links" data-testid="tab-links">{t.optimization.tabs.aiLinks}</TabsTrigger>
           </TabsList>
 
           <TabsContent value="formatted" className="space-y-4">
             <div className="flex flex-wrap items-center justify-between gap-2">
-              <h3 className="font-semibold text-lg">Optimize Edilmiş Prompt</h3>
+              <h3 className="font-semibold text-lg">{t.optimization.title}</h3>
               <div className="flex items-center gap-2">
                 <Button
                   variant="outline"
@@ -145,7 +147,7 @@ export function OptimizationPanel({ data }: OptimizationPanelProps) {
                   ) : (
                     <Copy className="w-4 h-4 mr-2" />
                   )}
-                  Kopyala
+                  {t.optimization.copyPrompt}
                 </Button>
                 <div className="relative" ref={shareMenuRef}>
                   <Button
@@ -155,7 +157,7 @@ export function OptimizationPanel({ data }: OptimizationPanelProps) {
                     data-testid="button-share-toggle"
                   >
                     <Share2 className="w-4 h-4 mr-2" />
-                    Paylaş
+                    {t.optimization.sharePrompt}
                   </Button>
                   {showShareMenu && (
                     <div className="absolute right-0 top-full mt-2 bg-card/95 backdrop-blur-sm border rounded-lg shadow-lg p-2 z-10 min-w-[200px]">
@@ -238,9 +240,9 @@ export function OptimizationPanel({ data }: OptimizationPanelProps) {
             <div className="grid md:grid-cols-2 gap-6">
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
-                  <h3 className="font-semibold text-lg">Orijinal</h3>
+                  <h3 className="font-semibold text-lg">{t.optimization.originalTokens}</h3>
                   <span className="text-sm text-muted-foreground font-mono" data-testid="text-original-tokens">
-                    {data.originalTokenCount.toLocaleString('tr-TR')} token
+                    {data.originalTokenCount.toLocaleString('tr-TR')} {t.results.tokens}
                   </span>
                 </div>
                 <div 
@@ -253,10 +255,10 @@ export function OptimizationPanel({ data }: OptimizationPanelProps) {
 
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
-                  <h3 className="font-semibold text-lg">Optimize Edilmiş</h3>
+                  <h3 className="font-semibold text-lg">{t.optimization.optimizedTokens}</h3>
                   <div className="flex items-center gap-2">
                     <span className="text-sm text-muted-foreground font-mono" data-testid="text-optimized-tokens">
-                      {data.optimizedTokenCount.toLocaleString('tr-TR')} token
+                      {data.optimizedTokenCount.toLocaleString('tr-TR')} {t.results.tokens}
                     </span>
                     <Button
                       variant="ghost"
@@ -284,9 +286,9 @@ export function OptimizationPanel({ data }: OptimizationPanelProps) {
 
           <TabsContent value="links" className="space-y-4">
             <div className="space-y-2">
-              <h3 className="font-semibold text-lg">AI Platformlarına Hızlı Erişim</h3>
+              <h3 className="font-semibold text-lg">{t.optimization.aiLinksTitle}</h3>
               <p className="text-sm text-muted-foreground">
-                Optimize edilmiş prompt otomatik kopyalanır, platformda Ctrl+V ile yapıştırın
+                {t.optimization.aiLinksDesc}
               </p>
             </div>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
@@ -297,14 +299,14 @@ export function OptimizationPanel({ data }: OptimizationPanelProps) {
                   try {
                     await navigator.clipboard.writeText(data.optimizedPrompt);
                     toast({
-                      title: "Optimize Edilmiş Prompt Kopyalandı!",
-                      description: `${link.name} açılıyor. Ctrl+V ile yapıştırın.`,
+                      title: t.optimization.promptCopied,
+                      description: `${link.name} ${t.optimization.promptCopiedDesc}`,
                     });
                     window.open(link.url, '_blank');
                   } catch (err) {
                     toast({
-                      title: "Hata",
-                      description: "Kopyalama başarısız oldu",
+                      title: t.common.error,
+                      description: t.optimization.copyError,
                       variant: "destructive",
                     });
                   }
@@ -319,7 +321,7 @@ export function OptimizationPanel({ data }: OptimizationPanelProps) {
                   >
                     <div className="space-y-2">
                       <p className="text-xs text-muted-foreground text-center">
-                        Chat with {link.name}
+                        {t.optimization.chatWith} {link.name}
                       </p>
                       <Button
                         variant="outline"
