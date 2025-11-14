@@ -63,6 +63,12 @@ async function upsertUser(
 }
 
 export async function setupAuth(app: Express) {
+  // Skip auth setup if no database
+  if (!storage) {
+    console.log("⚠ Auth disabled - no database connection");
+    return;
+  }
+  
   app.set("trust proxy", 1);
   app.use(getSession());
   app.use(passport.initialize());

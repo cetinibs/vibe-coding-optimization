@@ -33,11 +33,13 @@ export interface IStorage {
 export class DatabaseStorage implements IStorage {
   // User operations
   async getUser(id: string): Promise<User | undefined> {
+    if (!db) throw new Error("Database not available");
     const [user] = await db.select().from(users).where(eq(users.id, id));
     return user;
   }
 
   async upsertUser(userData: UpsertUser): Promise<User> {
+    if (!db) throw new Error("Database not available");
     const [user] = await db
       .insert(users)
       .values(userData)
@@ -54,11 +56,13 @@ export class DatabaseStorage implements IStorage {
   
   // Calculation operations
   async createCalculation(calc: InsertCalculation): Promise<Calculation> {
+    if (!db) throw new Error("Database not available");
     const [calculation] = await db.insert(calculations).values(calc).returning();
     return calculation;
   }
   
   async getUserCalculations(userId: string): Promise<Calculation[]> {
+    if (!db) throw new Error("Database not available");
     return db
       .select()
       .from(calculations)
@@ -67,6 +71,7 @@ export class DatabaseStorage implements IStorage {
   }
   
   async getCalculation(id: string): Promise<Calculation | undefined> {
+    if (!db) throw new Error("Database not available");
     const [calculation] = await db
       .select()
       .from(calculations)
@@ -75,22 +80,26 @@ export class DatabaseStorage implements IStorage {
   }
   
   async deleteCalculation(id: string): Promise<void> {
+    if (!db) throw new Error("Database not available");
     await db.delete(calculations).where(eq(calculations.id, id));
   }
   
   // Favorite operations
   async addFavorite(fav: InsertFavorite): Promise<Favorite> {
+    if (!db) throw new Error("Database not available");
     const [favorite] = await db.insert(favorites).values(fav).returning();
     return favorite;
   }
   
   async removeFavorite(userId: string, calculationId: string): Promise<void> {
+    if (!db) throw new Error("Database not available");
     await db
       .delete(favorites)
       .where(and(eq(favorites.userId, userId), eq(favorites.calculationId, calculationId)));
   }
   
   async getUserFavorites(userId: string): Promise<Calculation[]> {
+    if (!db) throw new Error("Database not available");
     const results = await db
       .select({
         calculation: calculations,
@@ -104,6 +113,7 @@ export class DatabaseStorage implements IStorage {
   }
   
   async isFavorite(userId: string, calculationId: string): Promise<boolean> {
+    if (!db) throw new Error("Database not available");
     const [fav] = await db
       .select()
       .from(favorites)
@@ -112,4 +122,4 @@ export class DatabaseStorage implements IStorage {
   }
 }
 
-export const storage = new DatabaseStorage();
+export const storage = db ? new DatabaseStorage() : null;
