@@ -126,9 +126,10 @@ export function OptimizationPanel({ data }: OptimizationPanelProps) {
         </div>
 
         <Tabs defaultValue="formatted" className="w-full">
-          <TabsList className="grid w-full grid-cols-3">
+          <TabsList className="grid w-full grid-cols-2 lg:grid-cols-4">
             <TabsTrigger value="formatted" data-testid="tab-formatted">{t.optimization.tabs.formatted}</TabsTrigger>
             <TabsTrigger value="comparison" data-testid="tab-comparison">{t.optimization.tabs.optimized}</TabsTrigger>
+            <TabsTrigger value="toon" data-testid="tab-toon">{t.optimization.tabs.toon}</TabsTrigger>
             <TabsTrigger value="links" data-testid="tab-links">{t.optimization.tabs.aiLinks}</TabsTrigger>
           </TabsList>
 
@@ -279,6 +280,84 @@ export function OptimizationPanel({ data }: OptimizationPanelProps) {
                   data-testid="text-optimized-prompt"
                 >
                   {data.optimizedPrompt}
+                </div>
+              </div>
+            </div>
+          </TabsContent>
+
+          <TabsContent value="toon" className="space-y-4">
+            <div className="space-y-4">
+              <div className="space-y-2">
+                <h3 className="font-semibold text-lg">{t.optimization.toonTitle}</h3>
+                <p className="text-sm text-muted-foreground">
+                  {t.optimization.toonDescription}
+                </p>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
+                <Badge variant="outline" className="justify-center py-2" data-testid="badge-toon-benefit-1">
+                  {t.optimization.toonBenefit1}
+                </Badge>
+                <Badge variant="outline" className="justify-center py-2" data-testid="badge-toon-benefit-2">
+                  {t.optimization.toonBenefit2}
+                </Badge>
+                <Badge variant="outline" className="justify-center py-2" data-testid="badge-toon-benefit-3">
+                  {t.optimization.toonBenefit3}
+                </Badge>
+                <Badge variant="outline" className="justify-center py-2" data-testid="badge-toon-benefit-4">
+                  {t.optimization.toonBenefit4}
+                </Badge>
+              </div>
+
+              <div className="grid md:grid-cols-3 gap-4">
+                <Card>
+                  <CardContent className="p-4 space-y-1">
+                    <p className="text-xs text-muted-foreground">{t.optimization.optimizedTokens}</p>
+                    <p className="text-2xl font-bold" data-testid="text-toon-optimized-tokens">
+                      {data.optimizedTokenCount.toLocaleString('tr-TR')}
+                    </p>
+                  </CardContent>
+                </Card>
+                <Card>
+                  <CardContent className="p-4 space-y-1">
+                    <p className="text-xs text-muted-foreground">{t.optimization.toonTokens}</p>
+                    <p className="text-2xl font-bold text-primary" data-testid="text-toon-token-count">
+                      {data.toonTokenCount.toLocaleString('tr-TR')}
+                    </p>
+                  </CardContent>
+                </Card>
+                <Card>
+                  <CardContent className="p-4 space-y-1">
+                    <p className="text-xs text-muted-foreground">{t.optimization.toonTokenReduction}</p>
+                    <p className="text-2xl font-bold text-green-600 dark:text-green-400" data-testid="text-toon-reduction">
+                      %{data.toonTokenReduction.toFixed(1)}
+                    </p>
+                  </CardContent>
+                </Card>
+              </div>
+
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <h4 className="font-semibold">{t.optimization.toonTitle}</h4>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => copyToClipboard(data.toonFormat, "toon")}
+                    data-testid="button-copy-toon"
+                  >
+                    {copiedField === "toon" ? (
+                      <Check className="w-4 h-4 mr-2" />
+                    ) : (
+                      <Copy className="w-4 h-4 mr-2" />
+                    )}
+                    {t.optimization.copyPrompt}
+                  </Button>
+                </div>
+                <div 
+                  className="bg-gradient-to-br from-green-500/5 to-emerald-500/10 rounded-lg p-6 border border-green-500/20 font-mono text-sm whitespace-pre-wrap min-h-[300px]"
+                  data-testid="text-toon-format"
+                >
+                  {data.toonFormat}
                 </div>
               </div>
             </div>
