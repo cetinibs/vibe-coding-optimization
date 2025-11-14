@@ -4,15 +4,16 @@ import { Calculator, Sparkles, Zap } from "lucide-react";
 import { useLanguage } from "@/lib/i18n/LanguageContext";
 
 const platforms = [
-  "KIRO Codex CLI",
-  "KIRO Claude Code",
-  "KIRO Gemini CLI",
-  "KIRO Cursor",
-  "KIRO Windsurf",
-  "KIRO Trea",
-  "KIRO Replit",
-  "KIRO v0",
-  "KIRO Bolt"
+  "KIRO",
+  "Codex CLI",
+  "Claude Code",
+  "Gemini CLI",
+  "Cursor",
+  "Windsurf",
+  "Trea",
+  "Replit",
+  "v0",
+  "Bolt"
 ];
 
 export function Hero() {
